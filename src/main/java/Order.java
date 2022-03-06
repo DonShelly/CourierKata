@@ -13,31 +13,41 @@ public class Order {
      * @param w Width of parcel.
      * @return A Parcel object.
      */
-    public Parcel addParcelToOrder(double l, double h, double w) {
+    public Parcel addParcelToOrder(double l, double h, double w, double weight) {
 
         double dimensionTotal = h*l*w;
+        double price;
 
         Parcel parcel = null;
 
-        if (h == 0 || l == 0 || w == 0) {
+        if (h == 0 || l == 0 || w == 0 || weight == 0) {
             parcel = new Parcel("Invalid Parcel", 0.0);
             orderList.add(parcel);
         }
         else if (dimensionTotal > 0 && dimensionTotal < 10) {
-            parcel = new Parcel("Small Parcel", 3.0);
+            price = calculatePriceByWeight(3.0, 1, weight);
+            parcel = new Parcel("Small Parcel", price);
             orderList.add(parcel);
         }else if (10 <= dimensionTotal && dimensionTotal < 50) {
-            parcel = new Parcel("Medium Parcel", 8.0);
+            price = calculatePriceByWeight(8.0, 3, weight);
+            parcel = new Parcel("Medium Parcel", price);
             orderList.add(parcel);
         }else if (50 <= dimensionTotal && dimensionTotal < 100) {
-            parcel = new Parcel("Large Parcel", 15.0);
+            price = calculatePriceByWeight(15.0, 6, weight);
+            parcel = new Parcel("Large Parcel", price);
             orderList.add(parcel);
         }else if (dimensionTotal >= 100) {
-            parcel = new Parcel("XL Parcel", 25.0);
+            price = calculatePriceByWeight(25.0, 10, weight);
+            parcel = new Parcel("XL Parcel", price);
             orderList.add(parcel);
         }
 
         return parcel;
+    }
+
+    private double calculatePriceByWeight(double price, double weightLimit, double weight) {
+        if (weight > weightLimit) price += (weight - weightLimit) * 2;
+        return price;
     }
 
     /**

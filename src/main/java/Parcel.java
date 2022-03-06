@@ -2,6 +2,7 @@ public class Parcel {
 
     String sizeCategory;
     double price;
+    double weight;
 
     /**
      * A representation of a parcel.
