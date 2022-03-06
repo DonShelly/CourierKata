@@ -1,7 +1,8 @@
 import java.util.ArrayList;
 
-public class ParcelCalculator {
+public class Order {
 
+    boolean speedyShipping = false;
     ArrayList<Parcel> orderList = new ArrayList<>();
 
     /**
@@ -15,6 +16,7 @@ public class ParcelCalculator {
     public Parcel addParcelToOrder(double l, double h, double w) {
 
         double dimensionTotal = h*l*w;
+
         Parcel parcel = null;
 
         if (h == 0 || l == 0 || w == 0) {
@@ -52,6 +54,28 @@ public class ParcelCalculator {
             System.out.println(parcel.sizeCategory + ": $" + parcel.price + ". ");
 
         }
-        System.out.print("Total Cost: $" + total);
+
+        if (speedyShipping) {
+            System.out.println("Speedy Shipping: +$" + total + ". Total Cost: $" + total*2);
+        }
+        else {
+            System.out.println("Total Cost: $" + total);
+        }
+    }
+
+    /**
+     * Calculate the total cost accounting for shipping.
+     * @return total cost of order.
+     */
+    public double getTotalCost() {
+        int total = 0;
+
+        for (Parcel parcel : orderList) {
+            total += parcel.price;
+        }
+
+        if (speedyShipping) total += total;
+
+        return total;
     }
 }
