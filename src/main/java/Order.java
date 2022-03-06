@@ -4,6 +4,7 @@ public class Order {
 
     boolean speedyShipping = false;
     ArrayList<Parcel> orderList = new ArrayList<>();
+    String parcelType;
 
     /**
      * Calculate the dimensions and cost of a given parcel and add it to the order.
@@ -17,36 +18,66 @@ public class Order {
 
         double dimensionTotal = h*l*w;
         double price;
+        parcelType = null;
 
         Parcel parcel = null;
 
+        //invalid parcel
         if (h == 0 || l == 0 || w == 0 || weight == 0) {
             parcel = new Parcel("Invalid Parcel", 0.0);
             orderList.add(parcel);
         }
+        //small parcel
         else if (dimensionTotal > 0 && dimensionTotal < 10) {
+            parcelType = "Small Parcel";
             price = calculatePriceByWeight(3.0, 1, weight);
-            parcel = new Parcel("Small Parcel", price);
+            parcel = new Parcel(parcelType, price);
             orderList.add(parcel);
+        //medium parcel
         }else if (10 <= dimensionTotal && dimensionTotal < 50) {
+            parcelType = "Medium Parcel";
             price = calculatePriceByWeight(8.0, 3, weight);
-            parcel = new Parcel("Medium Parcel", price);
+            parcel = new Parcel(parcelType, price);
             orderList.add(parcel);
+        //large parcel
         }else if (50 <= dimensionTotal && dimensionTotal < 100) {
+            parcelType = "Large Parcel";
             price = calculatePriceByWeight(15.0, 6, weight);
-            parcel = new Parcel("Large Parcel", price);
+            parcel = new Parcel(parcelType, price);
             orderList.add(parcel);
+        //XL parcel
         }else if (dimensionTotal >= 100) {
+            parcelType = "XL Parcel";
             price = calculatePriceByWeight(25.0, 10, weight);
-            parcel = new Parcel("XL Parcel", price);
+            parcel = new Parcel(parcelType, price);
             orderList.add(parcel);
         }
 
         return parcel;
     }
 
+    /**
+     * Calculate the adjusted price based on weight
+     * @param price original price for parcel type
+     * @param weightLimit Weight limit for parcel type
+     * @param weight actual weight of parcel
+     * @return  adjusted price
+     */
     private double calculatePriceByWeight(double price, double weightLimit, double weight) {
-        if (weight > weightLimit) price += (weight - weightLimit) * 2;
+
+        double adjustment;
+
+        if (weight > weightLimit){
+
+            adjustment = (weight - weightLimit) * 2;
+
+            if (price + adjustment > 50){
+                parcelType = "Heavy Parcel";
+                adjustment = weight - 50;
+                price = 50;
+            }
+            price += adjustment;
+        }
         return price;
     }
 

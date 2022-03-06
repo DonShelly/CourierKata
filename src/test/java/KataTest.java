@@ -59,4 +59,19 @@ class KataTest {
         System.out.println("OverweightTest");
         order.printOrderToConsole();
     }
+
+    @Test
+    void HeavyParcelTest(){
+        Order order = new Order();
+
+        //add medium parcel that is heavy should be $100
+        order.addParcelToOrder(3,2,2, 100);
+        assertEquals(100, order.getTotalCost());
+
+        Order order2 = new Order();
+
+        //add medium parcel that is heavy but not heavy enough to change type $42
+        order2.addParcelToOrder(3,2,2, 20);
+        assertEquals(42, order2.getTotalCost());
+    }
 }
